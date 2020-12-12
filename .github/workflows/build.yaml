@@ -1,0 +1,50 @@
+name: Build Nvidia Docker Image
+# This workflow is triggered on a schedule and can also be triggered manually
+on:
+  schedule:
+    # Every day at 1am
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      stream:
+        description: 'Flatcar Stream'
+        required: true
+        default: 'stable'
+
+jobs:
+  build:
+    #    outputs:
+    #      status: ${{ steps.early.conclusion }}
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flatcar_track: ['stable']
+        nvidia_driver_version: ['440.64']
+    env:
+      DOCKER_HUB_USERNAME: 'mediadepot'
+      DOCKER_HUB_REPO: 'flatcar-nvidia-driver'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download and Build Nvidia Drivers
+        run: |
+          curl https://${{matrix.flatcar_track}}.release.flatcar-linux.net/amd64-usr/current/version.txt -o version.txt
+          cat version.txt
+          export $(cat version.txt | xargs)
+          # if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
+          #  curl -s https://hub.docker.com/v2/repositories/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}/tags/?page_size=10000 |
+          #  jq -e "[.results | .[] | .name == \"${FLATCAR_VERSION}\"] | any | not" ||
+          #  exit 0;
+          # fi
+
+          docker build \
+            --build-arg NVIDIA_DRIVER_VERSION=${{matrix.nvidia_driver_version}} \
+            --build-arg FLATCAR_VERSION=${FLATCAR_VERSION} \
+            --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:${FLATCAR_VERSION}-${{matrix.nvidia_driver_version}} \
+            --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:${{matrix.flatcar_track}}-${{matrix.nvidia_driver_version}} \
+            .
+
+          docker login -u="analogj" -p="${{ secrets.DOCKER_HUB_PASSWORD }}"
+          docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:${FLATCAR_VERSION}-${{matrix.nvidia_driver_version}}
+          docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:${{matrix.flatcar_track}}-${{matrix.nvidia_driver_version}}
