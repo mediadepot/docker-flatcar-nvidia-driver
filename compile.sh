@@ -31,5 +31,5 @@ mkdir -p /out/lib/modules/"$KERNEL_VERSION" /out/bin
 cp ./*.so* /out/lib
 cp kernel/*.ko /out/lib/modules/"$KERNEL_VERSION"
 for b in nvidia-debugdump nvidia-cuda-mps-control nvidia-xconfig nvidia-modprobe nvidia-smi nvidia-cuda-mps-server nvidia-persistenced nvidia-settings; do cp "$b" /out/bin/; done
-cp /install.sh /out/bin/install-nvidia-driver.sh
-chmod +x /out/bin/install-nvidia-driver.sh
+cp /install.sh /out/bin/install.sh
+chmod +x /out/bin/install.sh

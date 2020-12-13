@@ -18,4 +18,7 @@ RUN /compile.sh
 FROM busybox
 LABEL maintainer="Jason Kulatunga <jason@thesparktree.com>"
 
-COPY --from=BUILD /out/ /out/
+COPY --from=BUILD /out/ /dist/
+
+# Copy files from dist director to (mounted)  out directory
+CMD ["cp","-r","/dist/", "/out"]
