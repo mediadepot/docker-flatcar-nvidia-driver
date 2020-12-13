@@ -1,45 +1,82 @@
 # Flatcar Container Linux Nvidia Driver
 
-> Note: this repo is a WIP.
+Leveraging NVIDIA GPUs on Container Linux involves the following steps:
+* compiling the NVIDIA kernel modules;
+* loading the kernel modules on demand;
+* creating NVIDIA device files; and
+* loading NVIDIA libraries
 
-```
-# Prepare Environment
-source /usr/share/coreos/release
-export FORKLIFT_DRIVER_NAME=nvidia
-export FORKLIFT_INSTALL_DIR=${FORKLIFT_INSTALL_DIR:-/opt/drivers}
-export FORKLIFT_CACHE_DIR="${FORKLIFT_INSTALL_DIR}/archive/${FORKLIFT_DRIVER_NAME}"
+Compounding this complexity further is the fact that these steps have to be executed whenever the Container Linux system updates since the modules may no longer be compatible with the new kernel.
 
-# Prepare Filesystem
-mkdir -p "$FORKLIFT_INSTALL_DIR"
-mkdir -p "$FORKLIFT_CACHE_DIR"
-rm -rf "${FORKLIFT_INSTALL_DIR:?}/${FORKLIFT_DRIVER_NAME}"
-
-# Extract Drivers From Docker Image
-docker run --rm -v ${FORKLIFT_CACHE_DIR}/${FLATCAR_RELEASE_VERSION}:/out mediadepot/flatcar-${FORKLIFT_DRIVER_NAME}-driver:flatcar_${FLATCAR_RELEASE_VERSION}-${FORKLIFT_DRIVER_NAME}_latest
-
-# setup symlink from cache directory to "install" directory
-ln -s "${FORKLIFT_CACHE_DIR}/${FLATCAR_RELEASE_VERSION}" "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}"
+Forklift takes care of automating all of these steps and ensures that kernel modules are up-to-date for the host's kernel.
 
 
-if [ -d "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/lib" ] ; then
-    mkdir -p "${FORKLIFT_LD_ROOT}/etc/ld.so.conf.d"
-    echo "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/lib" > "${FORKLIFT_LD_ROOT}/etc/ld.so.conf.d/${FORKLIFT_DRIVER_NAME}.conf"
-    ldconfig -r "${FORKLIFT_LD_ROOT}" 2> /dev/null
-fi
-# shellcheck disable=SC1090
-source "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/install.sh"
+## Installation for Systemd
 
+### Requirements
+First, make sure you have the [Forklift code available](https://github.com/mediadepot/flatcar-forklift) on your Flatcar Container Linux machine and that the `forklift` service is installed.
 
+### Getting Started
+Enable and start the `forklift` template unit file with the desired driver:
+```sh
+sudo systemctl enable forklift@nvidia
+sudo systemctl start forklift@nvidia
 ```
 
+This service takes care of automatically compiling, installing, backing up, and loading the NVIDIA kernel modules as well as creating the NVIDIA device files.
 
-docker build \
-    --build-arg NVIDIA_DRIVER_VERSION=440.64 \
-    --build-arg FLATCAR_VERSION=2605.9.0 .
+Compiling the NVIDIA kernel modules can take between 10-15 minutes depending on your Internet speed, CPU, and RAM. To check the progress of the compilation, run:
+```sh
+journalctl -fu forklift@nvidia
+```
 
+## Verify
+Once Forklift has successfully run, the host should have NVIDIA device files and kernel modules loaded. To verify that the kernel modules were loaded, run:
+```sh
+lsmod | grep nvidia
+```
+
+This should return something like:
+```sh
+nvidia_uvm            626688  2
+nvidia              12267520  35 nvidia_uvm
+...
+```
+
+Verify that the devices were created with:
+```sh
+ls /dev/nvidia*
+```
+
+This should produce output like:
+```sh
+/dev/nvidia-uvm  /dev/nvidia0  /dev/nvidiactl
+```
+
+Finally, try running the NVIDIA system monitoring interface (SMI) command, `nvidia-smi`, to check the status of the connected GPU:
+```sh
+/opt/drivers/nvidia/bin/nvidia-smi
+```
+
+If your GPU is connected, this command will return information about the model, temperature, memory usage, GPU utilization etc.
+
+## Leveraging NVIDIA GPUs in Containers
+Now that the kernel modules are loaded, devices are present, and libraries have been created, the connected GPU can be utilized in containerized applications.
+
+In order to give the container access to the GPU, the device files must be explicitly loaded in the namespace, and the NVIDIA libraries and binaries must be mounted in the container. Consider the following command, which runs the `nvidia-smi` command inside of a Docker container:
+```sh
+docker run -it \
+--device=/dev/nvidiactl \
+--device=/dev/nvidia-uvm \
+--device=/dev/nvidia0 \
+--volume=/opt/drivers/nvidia:/usr/local/nvidia:ro \
+--entrypoint=nvidia-smi \
+nvidia/cuda:9.1-devel
+```
 
 # References
 
+- https://github.com/squat/modulus/tree/master/nvidia
 - https://github.com/kinvolk/coreos-overlay/blob/main/x11-drivers/nvidia-drivers/files/bin/setup-nvidia
 - https://raw.githubusercontent.com/kinvolk/manifest/v2605.9.0/main.xml
 - https://github.com/BugRoger/coreos-nvidia-driver
