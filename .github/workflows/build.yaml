@@ -29,15 +29,16 @@ jobs:
         uses: actions/checkout@v2
       - name: Download and Build Nvidia Drivers
         run: |
+          echo "=========================== Check ==========================="
           curl https://${{matrix.flatcar_track}}.release.flatcar-linux.net/amd64-usr/current/version.txt -o version.txt
           cat version.txt
           export $(cat version.txt | xargs)
-          # if [ "$TRAVIS_EVENT_TYPE" != "push" ]; then
-          #  curl -s https://hub.docker.com/v2/repositories/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}/tags/?page_size=10000 |
-          #  jq -e "[.results | .[] | .name == \"${FLATCAR_VERSION}\"] | any | not" ||
-          #  exit 0;
-          # fi
+          if [ "${{github.event_name}}" == "workflow_dispatch" ]; then
+            curl -s https://hub.docker.com/v2/repositories/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}/tags/?page_size=10000 |
+            jq -e "[.results | .[] | .name == \"flatcar_${FLATCAR_VERSION}-nvidia_latest\"] | any | not" || echo "Tag 'flatcar_${FLATCAR_VERSION}-nvidia_latest' already exists" && exit 0;
+          fi
 
+          echo "=========================== Build Nvidia Driver Image ==========================="
           docker build \
             --build-arg NVIDIA_DRIVER_VERSION=${{matrix.nvidia_driver_version}} \
             --build-arg FLATCAR_VERSION=${FLATCAR_VERSION} \
@@ -45,6 +46,7 @@ jobs:
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}} \
             .
 
+          echo "=========================== Push Images ==========================="
           docker login -u="analogj" -p="${{ secrets.DOCKER_HUB_PASSWORD }}"
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}}
