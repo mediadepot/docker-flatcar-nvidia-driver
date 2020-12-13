@@ -15,7 +15,7 @@ mkdir -p "$FORKLIFT_CACHE_DIR"
 rm -rf "${FORKLIFT_INSTALL_DIR:?}/${FORKLIFT_DRIVER_NAME}"
 
 # Extract Drivers From Docker Image
-docker run --rm -v ${FORKLIFT_CACHE_DIR}/${FLATCAR_RELEASE_VERSION}:/out mediadepot/flatcar-nvidia-driver:flatcar_${FLATCAR_RELEASE_VERSION}-nvidia_latest
+docker run --rm -v ${FORKLIFT_CACHE_DIR}/${FLATCAR_RELEASE_VERSION}:/out mediadepot/flatcar-${FORKLIFT_DRIVER_NAME}-driver:flatcar_${FLATCAR_RELEASE_VERSION}-${FORKLIFT_DRIVER_NAME}_latest
 
 # setup symlink from cache directory to "install" directory
 ln -s "${FORKLIFT_CACHE_DIR}/${FLATCAR_RELEASE_VERSION}" "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}"
