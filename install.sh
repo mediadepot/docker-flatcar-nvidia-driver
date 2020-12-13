@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 set -e
 # This script must be executed on the flatcar host, not within a container
 
