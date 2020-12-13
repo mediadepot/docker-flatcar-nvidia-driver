@@ -24,3 +24,7 @@ if [ ! -e /dev/nvidia-uvm ] ; then
     D=$(grep nvidia-uvm /proc/devices | cut -d " " -f 1)
     mknod -m 666 /dev/nvidia-uvm c "$D" 0
 fi
+
+# Verify installation
+./${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/bin/nvidia-smi
+./${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/bin/nvidia-modprobe -u -m -c 0

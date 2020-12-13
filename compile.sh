@@ -9,7 +9,7 @@ chmod +x nvidia.run
 ./nvidia.run -x -s
 pushd "./NVIDIA-Linux-x86_64-$NVIDIA_DRIVER_VERSION"
 export IGNORE_MISSING_MODULE_SYMVERS=1
-export KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release) # see https://superuser.com/questions/504684/is-the-version-of-the-linux-kernel-listed-in-the-source-some-where
+export KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release || ls /lib/modules) # see https://superuser.com/questions/504684/is-the-version-of-the-linux-kernel-listed-in-the-source-some-where
 # see https://github.com/NVIDIA/nvidia-installer/blob/eef089de55aeabe537c67a17e1f71db99aa23be6/option_table.h for a full list of options/flags
 ./nvidia-installer -s -n \
   --kernel-name="${KERNEL_VERSION}" \
