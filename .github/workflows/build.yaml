@@ -42,7 +42,7 @@ jobs:
             --build-arg NVIDIA_DRIVER_VERSION=${{matrix.nvidia_driver_version}} \
             --build-arg FLATCAR_VERSION=${FLATCAR_VERSION} \
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest \
-            --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}}
+            --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}} \
             .
 
           docker login -u="analogj" -p="${{ secrets.DOCKER_HUB_PASSWORD }}"
