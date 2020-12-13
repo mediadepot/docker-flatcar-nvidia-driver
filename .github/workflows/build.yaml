@@ -20,7 +20,13 @@ jobs:
     strategy:
       matrix:
         flatcar_track: ['stable', 'beta']
-        nvidia_driver_version: ['440.64']
+        include:
+          - flatcar_track: 'stable'
+            nvidia_driver_version: '440.64'
+          - flatcar_track: 'beta'
+            nvidia_driver_version: '450.80.02'
+
+
     env:
       DOCKER_HUB_USERNAME: 'mediadepot'
       DOCKER_HUB_REPO: 'flatcar-nvidia-driver'
