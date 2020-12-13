@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        flatcar_track: ['stable']
+        flatcar_track: ['stable', 'beta']
         nvidia_driver_version: ['440.64']
     env:
       DOCKER_HUB_USERNAME: 'mediadepot'
