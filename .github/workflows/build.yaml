@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         flatcar_track: ['stable', 'beta']
-        nvidia_driver_version: ['440.64']
-#        include:
-#          - flatcar_track: 'stable'
-#            nvidia_driver_version: '450.80.02'
-#          - flatcar_track: 'beta'
-#            nvidia_driver_version: '450.80.02'
+#        nvidia_driver_version: ['440.64']
+        include:
+          - flatcar_track: 'stable'
+            nvidia_driver_version: '440.64'
+          - flatcar_track: 'beta'
+            nvidia_driver_version: '450.80.02'
 
 
     env:
