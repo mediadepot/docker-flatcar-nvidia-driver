@@ -18,6 +18,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         flatcar_track: ['stable', 'beta']
         nvidia_driver_version: ['440.64']
