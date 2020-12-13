@@ -5,9 +5,9 @@
 ```
 # Prepare Environment
 source /usr/share/coreos/release
-FORKLIFT_DRIVER_NAME=nvidia
-FORKLIFT_INSTALL_DIR=${FORKLIFT_INSTALL_DIR:-/opt/drivers}
-FORKLIFT_CACHE_DIR="${FORKLIFT_INSTALL_DIR}/archive/${FORKLIFT_DRIVER_NAME}"
+export FORKLIFT_DRIVER_NAME=nvidia
+export FORKLIFT_INSTALL_DIR=${FORKLIFT_INSTALL_DIR:-/opt/drivers}
+export FORKLIFT_CACHE_DIR="${FORKLIFT_INSTALL_DIR}/archive/${FORKLIFT_DRIVER_NAME}"
 
 # Prepare Filesystem
 mkdir -p "$FORKLIFT_INSTALL_DIR"
@@ -27,7 +27,7 @@ if [ -d "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/lib" ] ; then
     ldconfig -r "${FORKLIFT_LD_ROOT}" 2> /dev/null
 fi
 # shellcheck disable=SC1090
-source "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/bin/install.sh"
+source "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}/install.sh"
 
 ```
 
