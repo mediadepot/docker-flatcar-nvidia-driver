@@ -43,7 +43,7 @@ jobs:
           export $(cat version.txt | xargs)
           if [ "${{github.event_name}}" != "workflow_dispatch" ]; then
             curl -s https://hub.docker.com/v2/repositories/${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}/tags/?page_size=10000 |
-            jq -e "[.results | .[] | .name == \"flatcar_${FLATCAR_VERSION}-nvidia_latest\"] | any | not" || echo "Tag 'flatcar_${FLATCAR_VERSION}-nvidia_latest' already exists" && exit 0;
+            jq -e "[.results | .[] | .name == \"flatcar_${FLATCAR_VERSION}-nvidia_latest\"] | any | not" || (echo "Tag 'flatcar_${FLATCAR_VERSION}-nvidia_latest' already exists" && exit 0);
           fi
 
           echo "=========================== Build Nvidia Driver Image ==========================="
