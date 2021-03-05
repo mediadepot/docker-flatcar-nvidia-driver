@@ -52,7 +52,7 @@ jobs:
             --build-arg FLATCAR_VERSION=${FLATCAR_VERSION} \
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest \
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}} \
-            --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest
+            --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest \
             .
 
           echo "=========================== Push Images ==========================="
