@@ -56,9 +56,9 @@ jobs:
             .
 
           echo "=========================== Push Images ==========================="
-          docker login -u="analogj" -p="${{ secrets.DOCKER_HUB_PASSWORD }}"
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u="analogj" --password-stdin
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}}
 
-          docker login https://docker.pkg.github.com -u="analogj" -p="${{ secrets.USER_GITHUB_TOKEN }}"
+          echo ${{ secrets.USER_GITHUB_TOKEN }} | docker login ghcr.io -u="analogj" --password-stdin
           docker push ghcr.io/${DOCKER_HUB_USERNAME}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest
