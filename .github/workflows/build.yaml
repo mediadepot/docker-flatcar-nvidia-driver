@@ -52,7 +52,7 @@ jobs:
             --build-arg FLATCAR_VERSION=${FLATCAR_VERSION} \
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest \
             --tag ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}} \
-            --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest \
+            --tag ghcr.io/${DOCKER_HUB_USERNAME}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest \
             .
 
           echo "=========================== Push Images ==========================="
@@ -60,5 +60,5 @@ jobs:
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_latest
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:flatcar_${FLATCAR_VERSION}-nvidia_${{matrix.nvidia_driver_version}}
 
-          docker login https://docker.pkg.github.com -u="analogj" -p="${{ secrets.GITHUB_TOKEN }}"
-          docker push docker.pkg.github.com/${GITHUB_REPOSITORY}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest
+          docker login https://docker.pkg.github.com -u="analogj" -p="${{ secrets.USER_GITHUB_TOKEN }}"
+          docker push ghcr.io/${DOCKER_HUB_USERNAME}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest
