@@ -2,8 +2,8 @@ name: Build Nvidia Docker Image
 # This workflow is triggered on a schedule and can also be triggered manually
 on:
   schedule:
-    # Every day at 1am
-    - cron: '0 1 * * *'
+    # Every day at 4am
+    - cron: '0 4 * * *'
   workflow_dispatch:
     inputs:
       stream:
