@@ -9,6 +9,7 @@ depmod -b "$FORKLIFT_LD_ROOT"
 modprobe -d "$FORKLIFT_LD_ROOT" ipmi_devintf
 depmod -b "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}"
 modprobe -d "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}" nvidia
+modprobe -d "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}" nvidia-modeset
 modprobe -d "${FORKLIFT_INSTALL_DIR}/${FORKLIFT_DRIVER_NAME}" nvidia-uvm
 if [ ! -e /dev/nvidia0 ] ; then
     NVDEVS=$(lspci | grep -i NVIDIA)
