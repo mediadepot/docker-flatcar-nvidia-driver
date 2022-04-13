@@ -24,12 +24,12 @@ jobs:
 #        nvidia_driver_version: ['440.64']
         # nvidia_driver_version should be taken from the following url (change to the correct branch)
         # https://github.com/flatcar-linux/coreos-overlay/blob/main/x11-drivers/nvidia-metadata/files/nvidia-metadata
-    
+
         include:
           - flatcar_track: 'stable'
             nvidia_driver_version: '460.32.03'
           - flatcar_track: 'beta'
-            nvidia_driver_version: '470.57.02'
+            nvidia_driver_version: '510.60.02'
 
 
     env:
