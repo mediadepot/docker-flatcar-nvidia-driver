@@ -13,7 +13,6 @@ export KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release || ls /
 # see https://github.com/NVIDIA/nvidia-installer/blob/eef089de55aeabe537c67a17e1f71db99aa23be6/option_table.h for a full list of options/flags
 ./nvidia-installer -s -n \
   --kernel-name="${KERNEL_VERSION}" \
-  --kernel-source-path=/usr/src/linux \
   --no-check-for-alternate-installs \
   --no-opengl-files \
   --no-distro-scripts \
