@@ -8,8 +8,8 @@ ARG FLATCAR_VERSION
 ARG NVIDIA_DRIVER_VERSION
 
 WORKDIR /tmp
-COPY compile.sh /compile.sh
-#COPY compile-patched.sh /compile.sh
+#COPY compile.sh /compile.sh
+COPY compile-patched.sh /compile.sh
 COPY install.sh /install.sh
 RUN /compile.sh
 
