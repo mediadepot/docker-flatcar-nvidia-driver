@@ -13,7 +13,7 @@ curl -Ls -o inttf-nvidia-patcher.sh https://nvidia.if-not-true-then-false.com/pa
 chmod +x inttf-nvidia-patcher.sh
 ./inttf-nvidia-patcher.sh -v $NVIDIA_DRIVER_VERSION
 ls -alt
-./nvidia-patched-kernel-*.run -x -s
+./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}-patched-*.run -x -s
 
 pushd "./NVIDIA-Linux-x86_64-$NVIDIA_DRIVER_VERSION"
 export IGNORE_MISSING_MODULE_SYMVERS=1
