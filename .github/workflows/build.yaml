@@ -27,9 +27,9 @@ jobs:
 
         include:
           - flatcar_track: 'stable'
-            nvidia_driver_version: '435.21'
+            nvidia_driver_version: '340.108'
           - flatcar_track: 'beta'
-            nvidia_driver_version: '435.21'
+            nvidia_driver_version: '340.108'
 
 
     env:
