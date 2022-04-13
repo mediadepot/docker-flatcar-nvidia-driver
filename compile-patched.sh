@@ -12,10 +12,10 @@ echo "Patching NVIDIA driver, see: https://www.if-not-true-then-false.com/2020/i
 curl -Ls -o inttf-nvidia-patcher.sh https://nvidia.if-not-true-then-false.com/patcher/inttf-nvidia-patcher.sh
 chmod +x inttf-nvidia-patcher.sh
 ./inttf-nvidia-patcher.sh -v $NVIDIA_DRIVER_VERSION
-ls -alt
-./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}-patched-*.run -x -s
+#./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}-patched-*.run -x -s
 
 pushd "./NVIDIA-Linux-x86_64-$NVIDIA_DRIVER_VERSION"
+ls -alt
 export IGNORE_MISSING_MODULE_SYMVERS=1
 export KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release || ls /lib/modules) # see https://superuser.com/questions/504684/is-the-version-of-the-linux-kernel-listed-in-the-source-some-where
 # see https://github.com/NVIDIA/nvidia-installer/blob/eef089de55aeabe537c67a17e1f71db99aa23be6/option_table.h for a full list of options/flags
