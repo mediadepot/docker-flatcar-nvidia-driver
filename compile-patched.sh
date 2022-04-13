@@ -12,7 +12,8 @@ echo "Patching NVIDIA driver, see: https://www.if-not-true-then-false.com/2020/i
 curl -Ls -o inttf-nvidia-patcher.sh https://nvidia.if-not-true-then-false.com/patcher/inttf-nvidia-patcher.sh
 chmod +x inttf-nvidia-patcher.sh
 ./inttf-nvidia-patcher.sh -v $NVIDIA_DRIVER_VERSION
-#./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}-patched-*.run -x -s
+rm -rf "./NVIDIA-Linux-x86_64-$NVIDIA_DRIVER_VERSION"
+./NVIDIA-Linux-x86_64-${NVIDIA_DRIVER_VERSION}-patched-*.run -x -s
 
 pushd "./NVIDIA-Linux-x86_64-$NVIDIA_DRIVER_VERSION"
 ls -alt
