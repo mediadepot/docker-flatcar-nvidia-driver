@@ -65,3 +65,4 @@ jobs:
 
           echo ${{ secrets.USER_GITHUB_TOKEN }} | docker login ghcr.io -u="analogj" --password-stdin
           docker push ghcr.io/${DOCKER_HUB_USERNAME}/flatcar-nvidia-driver:flatcar_${FLATCAR_VERSION}-nvidia_latest
+      - uses: gautamkrishnar/keepalive-workflow@v1 # using the workflow with default settings
