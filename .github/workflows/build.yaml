@@ -3,7 +3,7 @@ name: Build Nvidia Docker Image
 on:
   schedule:
     # Every day at 4am
-    - cron: '0 4 * * *'
+    - cron: '0 12 * * *'
   workflow_dispatch:
     inputs:
       stream:
