@@ -27,7 +27,7 @@ jobs:
         # https://github.com/flatcar/scripts/blob/main/sdk_container/src/third_party/coreos-overlay/x11-drivers/nvidia-drivers/files/nvidia-metadata
         include:
           - flatcar_track: 'stable'
-            nvidia_driver_version: '510.47.03'
+            nvidia_driver_version: '535.104.05'
           - flatcar_track: 'beta'
             nvidia_driver_version: '535.104.05'
 
